@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:Exocortex/react-scripts.git
+	branch = master
+	commit = 2f5c451195b862f1bfc5b4c5f63aca74d0828da2
+	parent = b891abf7a85ca19541addd73c777fb7a9915cf8f
+	cmdver = 0.3.1
