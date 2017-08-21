@@ -1,6 +1,4 @@
 {
-  "name": "create-react-app-exocortex",
-  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "node packages/react-scripts/scripts/build.js",
