@@ -11,7 +11,6 @@
 'use strict';
 
 const autoprefixer = require('autoprefixer');
-const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -32,32 +31,6 @@ const publicPath = '/';
 const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
-
-const root = path.resolve('../..');
-
-var es6 = {};
-var notES6 = {
-  three: true,
-  claraCAD: true,
-};
-var include = [paths.appSrc];
-(function processDirectory(root, checkSymbolic, sub) {
-  var readPath = sub ? path.join(root, sub) : root;
-  fs.readdirSync(readPath).forEach(function(dir) {
-    if (dir === '@exocortex') {
-      return processDirectory(path.join(readPath, dir), false);
-    }
-    if (!notES6[dir]) {
-      if (
-        !checkSymbolic ||
-        fs.lstatSync(path.join(readPath, dir)).isSymbolicLink()
-      ) {
-        es6[dir] = true;
-        include.push(fs.realpathSync(path.join(readPath, dir)));
-      }
-    }
-  });
-})(root, true, 'node_modules');
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -114,7 +87,6 @@ module.exports = {
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: [
-      path.join(root, 'node_modules'),
       'node_modules',
       paths.appNodeModules,
     ].concat(
@@ -148,7 +120,7 @@ module.exports = {
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      //new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
     ],
   },
   module: {
@@ -179,7 +151,7 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include,
+        include: paths.appSrc,
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -200,7 +172,7 @@ module.exports = {
           // Process JS with Babel.
           {
             test: /\.(js|jsx)$/,
-            include,
+            include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
               // @remove-on-eject-begin
